@@ -1,51 +1,88 @@
 # Production ML Churn Prediction Pipeline
 
-An end-to-end Machine Learning pipeline that processes features, trains an XGBoost classifier, and serves real-time predictions via a FastAPI REST API.
+![CI Pipeline](https://github.com/Snekha1307/production-ml-churn-pipeline/actions/workflows/ci.yml/badge.svg)
 
-## Tech Stack
-- Python
-- XGBoost (Machine Learning Model)
-- FastAPI & Uvicorn (REST API Serving)
-- Pandas & PyArrow (Feature Store & Parquet support)
-- Pydantic (Data validation)
+An end-to-end production-ready Machine Learning pipeline designed to predict customer churn. Built with FastAPI, XGBoost, Docker, and GitHub Actions CI/CD.
 
-## Directory Structure
+---
+
+## Project Structure
+
+```text
+├── .github/workflows/   # GitHub Actions CI/CD pipeline
+├── config/              # Configuration files
+├── models/              # Trained ML models (.joblib)
+├── src/                 # Application source code
+│   ├── app.py           # FastAPI REST API implementation
+│   ├── predict.py       # Inference pipeline
+│   └── train.py         # Model training script
+├── tests/               # Unit test suite for API & model
+├── Dockerfile           # Production container configuration
+├── requirements.txt     # Python dependency specifications
+└── README.md            # Project documentation
 ```
-production-ml-churn-pipeline/
-|-- config/
-|   +-- config.yaml
-|-- src/
-|   |-- features.py
-|   |-- train.py
-|   +-- app.py
-|-- requirements.txt
-|-- .gitignore
-+-- README.md
-```
 
-## How to Run the Project
+---
 
-### 1. Clone & Setup Environment
+## Getting Started
+
+### 1. Prerequisites
+- Python 3.12+
+- Git
+- Docker (optional)
+
+### 2. Local Setup
+Clone the repository and set up a virtual environment:
+
 ```bash
-git clone <YOUR_GITHUB_REPO_URL>
+git clone [https://github.com/Snekha1307/production-ml-churn-pipeline.git](https://github.com/Snekha1307/production-ml-churn-pipeline.git)
 cd production-ml-churn-pipeline
+
 python -m venv venv
-venv\\Scripts\\activate
+# On Windows:
+venv\Scripts\activate
+# On macOS/Linux:
+source venv/bin/activate
+
 pip install -r requirements.txt
 ```
 
-### 2. Feature Engineering
+---
+
+## Running Tests & API Locally
+
+### Run Unit Tests
+To execute the automated `pytest` suite:
 ```bash
-python src/features.py
+python -m pytest -v
 ```
 
-### 3. Train Model
+### Launch FastAPI Server
+To start the prediction REST API server locally:
 ```bash
-python src/train.py
+uvicorn src.app:app --reload
+```
+Once running, access the interactive Swagger documentation at **`http://127.0.0.1:8000/docs`**.
+
+---
+
+## Docker Deployment
+
+### Build Container Image
+```bash
+docker build -t churn-pipeline-app .
 ```
 
-### 4. Run REST API Server
+### Run Container
 ```bash
-python -m uvicorn src.app:app --port 8000
+docker run -d -p 8000:8000 churn-pipeline-app
 ```
-Navigate to http://127.0.0.1:8000/docs to test live predictions.
+
+---
+
+## Continuous Integration (CI/CD)
+
+This repository uses **GitHub Actions** to automate quality checks. On every `push` or `pull_request` to the `main` branch, the CI pipeline automatically:
+1. Sets up Python 3.12 environment.
+2. Installs required dependencies.
+3. Executes the full `pytest` suite to ensure API and model integrity.
