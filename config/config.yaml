@@ -1,0 +1,7 @@
+raw_data_path: "data/raw_incoming/churn_data.csv"
+processed_data_path: "data/feature_store/features.parquet"
+model_dir: "models/"
+eval_dir: "artifacts/eval/"
+target_column: "Churn"
+random_state: 42
+test_size: 0.2
